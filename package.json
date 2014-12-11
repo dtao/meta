@@ -1,0 +1,25 @@
+{
+  "name": "meta",
+  "version": "0.1.0",
+  "description": "You'll see",
+  "main": "meta.js",
+  "scripts": {
+    "test": "autodoc -t meta.js && mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dtao/meta"
+  },
+  "author": "Dan Tao <daniel.tao@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dtao/meta/issues"
+  },
+  "devDependencies": {
+    "autodoc": "~0.6.2",
+    "mocha": "~2.0.1"
+  },
+  "dependencies": {
+    "js-yaml": "~3.2.3"
+  }
+}
