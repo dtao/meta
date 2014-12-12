@@ -42,7 +42,7 @@ Object.defineProperty(meta.Entity.prototype, 'singular', {
 
 Object.defineProperty(meta.Entity.prototype, 'plural', {
   get: function() {
-    return capitalize(this.name) + 's';
+    return pluralize(this.singular);
   }
 });
 
@@ -56,7 +56,7 @@ Object.defineProperty(meta.Entity.prototype, 'underscore', {
 
 Object.defineProperty(meta.Entity.prototype, 'underscorePlural', {
   get: function() {
-    return this.underscore + 's';
+    return pluralize(this.underscore);
   }
 });
 
@@ -156,6 +156,22 @@ function capitalize(string) {
 /**
  * @private
  * @example
+ * pluralize('cow');   // => 'cows'
+ * pluralize('dress'); // => 'dresses'
+ * pluralize('bunny'); // => 'bunnies'
+ */
+function pluralize(word) {
+  if (endsWith(word, 's')) {
+    return word + 'es';
+  } else if (endsWith(word, 'y')) {
+    return word.replace(/y$/, 'ies');
+  }
+  return word + 's';
+}
+
+/**
+ * @private
+ * @example
  * isUpperCase('a'); // => false
  * isUpperCase('A'); // => true
  * isUpperCase('Z'); // => true
@@ -164,6 +180,17 @@ function capitalize(string) {
 function isUpperCase(letter) {
   var charCode = letter.charCodeAt(0);
   return charCode >= 65 && charCode <= 90;
+}
+
+/**
+ * @private
+ * @example
+ * endsWith('foo', 'o');  // => true
+ * endsWith('foo', 'oo'); // => true
+ * endsWith('foo', 'r');  // => false
+ */
+function endsWith(string, suffix) {
+  return string.indexOf(suffix, string.length - suffix.length) != -1;
 }
 
 module.exports = meta;
