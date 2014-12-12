@@ -9,6 +9,12 @@ var meta = {};
 meta.Entity = function Entity() {
 };
 
+meta.Entity.create = function create(constructor) {
+  constructor.prototype = Object.create(meta.Entity.prototype, {});
+  constructor.prototype.constructor = constructor;
+  return constructor;
+};
+
 /**
  * Gets a string property, or a default value. If no default is specified,
  * throws an informative error.
@@ -50,20 +56,17 @@ meta.Entity.prototype.getBoolean = function(data, key, defaultValue) {
 /**
  * Represents a software application consisting of models and views.
  */
-meta.Application = function Application(data) {
+meta.Application = meta.Entity.create(function Application(data) {
   data = data || {};
 
   this.name = this.getString(data, 'name');
   this.models = map(data.models || [], meta.Model);
-};
-
-meta.Application.prototype = Object.create(meta.Entity.prototype, {});
-meta.Application.prototype.constructor = meta.Application;
+});
 
 /**
  * Represents a "model" (domain object) in an application.
  */
-meta.Model = function Model(data) {
+meta.Model = meta.Entity.create(function Model(data) {
   if (!(this instanceof meta.Model)) {
     return new meta.Model(data);
   }
@@ -71,15 +74,12 @@ meta.Model = function Model(data) {
   data = data || {};
   this.name = this.getString(data, 'name');
   this.attributes = map(data.attributes || [], meta.Attribute);
-};
-
-meta.Model.prototype = Object.create(meta.Entity.prototype, {});
-meta.Model.prototype.constructor = meta.Model;
+});
 
 /**
  * Represents an attribute or property of a model.
  */
-meta.Attribute = function Attribute(data) {
+meta.Attribute = meta.Entity.create(function Attribute(data) {
   if (!(this instanceof meta.Attribute)) {
     return new meta.Attribute(data);
   }
@@ -88,10 +88,7 @@ meta.Attribute = function Attribute(data) {
   this.name = this.getString(data, 'name');
   this.type = this.getString(data, 'type', 'string');
   this.required = this.getBoolean(data, 'required', false);
-};
-
-meta.Attribute.prototype = Object.create(meta.Entity.prototype, {});
-meta.Attribute.prototype.constructor = meta.Attribute;
+});
 
 /**
  * Converts the short form to the long form.
