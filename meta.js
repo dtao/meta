@@ -34,6 +34,32 @@ meta.Entity.create = function create(constructor) {
   };
 });
 
+Object.defineProperty(meta.Entity.prototype, 'singular', {
+  get: function() {
+    return capitalize(this.name);
+  }
+});
+
+Object.defineProperty(meta.Entity.prototype, 'plural', {
+  get: function() {
+    return capitalize(this.name) + 's';
+  }
+});
+
+Object.defineProperty(meta.Entity.prototype, 'underscore', {
+  get: function() {
+    return this.name.replace(/([a-z])([A-Z])/g, function(match, lower, upper) {
+      return lower + '_' + upper.toLowerCase();
+    });
+  }
+});
+
+Object.defineProperty(meta.Entity.prototype, 'underscorePlural', {
+  get: function() {
+    return this.underscore + 's';
+  }
+});
+
 /**
  * Represents a software application consisting of models and views.
  */
@@ -125,6 +151,19 @@ function extend(object, properties) {
  */
 function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.substring(1);
+}
+
+/**
+ * @private
+ * @example
+ * isUpperCase('a'); // => false
+ * isUpperCase('A'); // => true
+ * isUpperCase('Z'); // => true
+ * isUpperCase('['); // => false
+ */
+function isUpperCase(letter) {
+  var charCode = letter.charCodeAt(0);
+  return charCode >= 65 && charCode <= 90;
 }
 
 module.exports = meta;
