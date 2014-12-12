@@ -41,7 +41,7 @@ meta.Application = meta.Entity.create(function Application(data) {
   data = data || {};
 
   this.name = this.getString(data, 'name');
-  this.models = map(data.models || [], meta.Model);
+  this.models = (data.models || []).map(meta.Model);
 });
 
 /**
@@ -54,7 +54,7 @@ meta.Model = meta.Entity.create(function Model(data) {
 
   data = data || {};
   this.name = this.getString(data, 'name');
-  this.attributes = map(data.attributes || [], meta.Attribute);
+  this.attributes = (data.attributes || []).map(meta.Attribute);
 });
 
 /**
@@ -103,14 +103,6 @@ meta.parse = function parse(content) {
 meta.loadFile = function loadFile(file) {
   return meta.parse(fs.readFileSync(file, 'utf8'));
 };
-
-function map(collection, fn) {
-  var result = new Array(collection.length);
-  for (var i = 0; i < collection.length; ++i) {
-    result[i] = fn(collection[i]);
-  }
-  return result;
-}
 
 function extend(object, properties) {
   for (var prop in properties) {
