@@ -104,6 +104,12 @@ meta.loadFile = function loadFile(file) {
   return meta.parse(fs.readFileSync(file, 'utf8'));
 };
 
+/**
+ * @private
+ * @example
+ * extend({foo: 1}, {bar: 2});             // => {foo: 1, bar: 2}
+ * extend({foo: 1}, {foo: '!', bar: '?'}); // => {foo: '!', bar: '?'}
+ */
 function extend(object, properties) {
   for (var prop in properties) {
     object[prop] = properties[prop];
@@ -111,6 +117,12 @@ function extend(object, properties) {
   return object;
 }
 
+/**
+ * @private
+ * @example
+ * capitalize('foo'); // => 'Foo'
+ * capitalize('');    // => ''
+ */
 function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.substring(1);
 }
