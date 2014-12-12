@@ -15,43 +15,24 @@ meta.Entity.create = function create(constructor) {
   return constructor;
 };
 
-/**
- * Gets a string property, or a default value. If no default is specified,
- * throws an informative error.
- */
-meta.Entity.prototype.getString = function(data, key, defaultValue) {
-  var value = data[key];
-  if (typeof value !== 'string') {
-    if (typeof defaultValue !== 'string') {
-      var errMsg = 'Expected a string for ' + this.constructor.name + '#' + key;
-      if (data.name) {
-        errMsg += ' ("' + data.name + '")';
-      }
-      throw Error(errMsg);
-    }
-    value = defaultValue;
-  }
-  return value;
-};
+['string', 'number', 'boolean'].forEach(function(type) {
+  var methodName = 'get' + capitalize(type);
 
-/**
- * Gets a boolean property, or a default value. If no default is specified,
- * throws an informative error.
- */
-meta.Entity.prototype.getBoolean = function(data, key, defaultValue) {
-  var value = data[key];
-  if (typeof value !== 'boolean') {
-    if (typeof defaultValue !== 'boolean') {
-      var errMsg = 'Expected a boolean for ' + this.constructor.name + '#' + key;
-      if (data.name) {
-        errMsg += ' ("' + data.name + '")';
+  meta.Entity.prototype[methodName] = function(data, key, defaultValue) {
+    var value = data[key];
+    if (typeof value !== type) {
+      if (typeof defaultValue !== type) {
+        var errMsg = 'Expected a ' + type + ' for ' + this.constructor.name + '#' + key;
+        if (data.name) {
+          errMsg += ' ("' + data.name + '")';
+        }
+        throw Error(errMsg);
       }
-      throw Error(errMsg);
+      value = defaultValue;
     }
-    value = defaultValue;
-  }
-  return value;
-};
+    return value;
+  };
+});
 
 /**
  * Represents a software application consisting of models and views.
@@ -136,6 +117,10 @@ function extend(object, properties) {
     object[prop] = properties[prop];
   }
   return object;
+}
+
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.substring(1);
 }
 
 module.exports = meta;
